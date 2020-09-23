@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Web.Http;
 
 namespace PlaceMyBet.Controllers
@@ -11,17 +12,19 @@ namespace PlaceMyBet.Controllers
     public class UsersController : ApiController
     {
         // GET: api/Users
-        public IEnumerable<string> Get()
+        public IEnumerable<Users> Get()
         {
-            return new string[] { "value1", "value2" };
+            var repository = new UsersRepository();
+            List<Users> users = repository.Retrieve();
+            return users;
         }
 
         // GET: api/Users/5
         public Users Get(int id)
         {
-            var repository = new UsersRepository();
-            Users user = repository.Retrieve();
-            return user;
+            /*var repository = new UsersRepository();
+            Users user = repository.Retrieve();*/
+            return null;
         }
 
         // POST: api/Users

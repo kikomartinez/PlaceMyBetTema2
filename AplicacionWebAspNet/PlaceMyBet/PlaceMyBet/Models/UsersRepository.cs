@@ -17,27 +17,36 @@ namespace PlaceMyBet.Models
             return connection;
         }
 
-        internal Users Retrieve()
+        internal List<Users> Retrieve()
         {
-            //Users user = new Users("prueba@gmail.com", "Pepe", "Martínez", 25);
-
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
             command.CommandText = "select * from usuario";
 
-            connection.Open();
-            MySqlDataReader result = command.ExecuteReader();
-
-            Users user = null;
-
-            if (result.Read())
+            try
             {
-                Debug.WriteLine("Recuparado:" + result.GetString(0) + " " + result.GetString(1) + " " + result.GetString(2) + " " + result.GetInt32(3));
-                user = new Users(result.GetString(0), result.GetString(1), result.GetString(2), result.GetInt32(3));
-            }
+                connection.Open();
+                MySqlDataReader result = command.ExecuteReader();
 
-            connection.Close();
-            return user;
+                Users user = null;
+                List<Users> users = new List<Users>();
+
+                while (result.Read())
+                {
+                    Debug.WriteLine("Recuparado:" + result.GetString(0) + " " + result.GetString(1) + " " + result.GetString(2) + " " + result.GetInt32(3));
+                    user = new Users(result.GetString(0), result.GetString(1), result.GetString(2), result.GetInt32(3));
+                    users.Add(user);
+                }
+
+                connection.Close();
+                return users;
+            }
+            
+            catch(MySqlException exception)
+            {
+                Debug.WriteLine("Se ha producido un error de conexión");
+                return null;
+            }
         }
     }
 }
