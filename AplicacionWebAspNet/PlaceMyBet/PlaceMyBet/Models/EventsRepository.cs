@@ -11,7 +11,7 @@ namespace PlaceMyBet.Models
     {
         public EventsRepository()
         {
-            tableName = "evento";
+            tableName = "EVENTOS";
         }
 
         protected override Events ConvertInfoToObject()

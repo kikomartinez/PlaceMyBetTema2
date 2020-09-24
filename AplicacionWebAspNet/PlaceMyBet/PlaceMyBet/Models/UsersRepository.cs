@@ -11,7 +11,7 @@ namespace PlaceMyBet.Models
     {
         public UsersRepository()
         {
-            tableName = "usuario";
+            tableName = "USUARIOS";
         }
 
         protected override Users ConvertInfoToObject()

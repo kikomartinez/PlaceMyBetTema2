@@ -9,7 +9,7 @@ namespace PlaceMyBet.Models
     {
         public BetsRepository()
         {
-            tableName = "apuesta";
+            tableName = "APUESTAS";
         }
 
         protected override Bets ConvertInfoToObject()

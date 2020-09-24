@@ -11,7 +11,7 @@ namespace PlaceMyBet.Models
 
         public MarketsRepository()
         {
-            tableName = "mercado";
+            tableName = "MERCADOS";
         }
 
         protected override Markets ConvertInfoToObject()
