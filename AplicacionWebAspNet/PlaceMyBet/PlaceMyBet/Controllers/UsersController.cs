@@ -22,8 +22,6 @@ namespace PlaceMyBet.Controllers
         // GET: api/Users/5
         public Users Get(int id)
         {
-            /*var repository = new UsersRepository();
-            Users user = repository.Retrieve();*/
             return null;
         }
 
