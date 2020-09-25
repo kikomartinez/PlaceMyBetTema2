@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Web.Http;
 
 namespace PlaceMyBet.Controllers
 {
-    public class MarketsController : AbstractController<MarketsRepository, Markets>
+    public class UserController : AbstractController<UserRepository, User>
     {
 
     }

@@ -5,9 +5,9 @@ using System.Web;
 
 namespace PlaceMyBet.Models
 {
-    public class Markets
+    public class Market
     {
-        public Markets(int marketID, int overOdds, int underOdds, int overMoney, int underMoney, int eventID)
+        public Market(int marketID, int overOdds, int underOdds, int overMoney, int underMoney, int eventID)
         {
             MarketID = marketID;
             OverOdds = overOdds;

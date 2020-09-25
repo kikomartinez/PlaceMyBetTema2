@@ -5,9 +5,9 @@ using System.Web;
 
 namespace PlaceMyBet.Models
 {
-    public class Users
+    public class User
     {
-        public Users(string email, string name, string surname, int age)
+        public User(string email, string name, string surname, int age)
         {
             Email = email;
             Name = name;

@@ -7,16 +7,16 @@ using System.Web;
 
 namespace PlaceMyBet.Models
 {
-    public class UsersRepository : AbstractRepository<Users>
+    public class UserRepository : AbstractRepository<User>
     {
-        public UsersRepository()
+        public UserRepository()
         {
             tableName = "USUARIOS";
         }
 
-        protected override Users ConvertInfoToObject()
+        protected override User ConvertInfoToObject()
         {
-            Users user = new Users(result.GetString(0), result.GetString(1), result.GetString(2), result.GetInt32(3));
+            User user = new User(result.GetString(0), result.GetString(1), result.GetString(2), result.GetInt32(3));
             return user;
         }
     }

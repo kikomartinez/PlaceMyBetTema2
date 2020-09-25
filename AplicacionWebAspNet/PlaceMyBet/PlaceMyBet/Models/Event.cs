@@ -5,9 +5,9 @@ using System.Web;
 
 namespace PlaceMyBet.Models
 {
-    public class Events
+    public class Event
     {
-        public Events(int eventID, string localTeam, string visitorTeam, string date)
+        public Event(int eventID, string localTeam, string visitorTeam, string date)
         {
             EventID = eventID;
             LocalTeam = localTeam;
