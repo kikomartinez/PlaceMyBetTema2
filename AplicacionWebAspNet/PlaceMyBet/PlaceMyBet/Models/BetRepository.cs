@@ -76,13 +76,33 @@ namespace PlaceMyBet.Models
             }
         }
 
-
         protected override BetDTO ConvertInfoToObject()
         {
             Debug.WriteLine(marketTypes[marketTypeIndex]);
             BetDTO bet = new BetDTO(result.GetString(1), result.GetInt32(2), result.GetInt32(3), result.GetString(4), result.GetString(5), marketTypes[marketTypeIndex]);
             marketTypeIndex++;
             return bet;
+        }
+
+        internal void Save(Bet bet)
+        {
+            MySqlConnection connection = Connect();
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + bet.Odd + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
+            Debug.WriteLine("comando " + command.CommandText);
+
+            try
+            {
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            catch
+            {
+                Debug.Write("Fallo de conexión");
+                connection.Close();
+            }
         }
     }
 }

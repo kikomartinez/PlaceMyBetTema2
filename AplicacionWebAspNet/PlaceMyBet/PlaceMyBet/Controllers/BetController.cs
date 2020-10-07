@@ -10,6 +10,10 @@ namespace PlaceMyBet.Controllers
 {
     public class BetController : AbstractController<BetRepository, BetDTO>
     {
-
+        public void Post([FromBody]Bet bet)
+        {
+            var repository = new BetRepository();
+            repository.Save(bet);
+        }
     }
 }
