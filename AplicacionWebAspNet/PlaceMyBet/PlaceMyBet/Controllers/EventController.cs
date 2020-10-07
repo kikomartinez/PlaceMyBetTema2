@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace PlaceMyBet.Controllers
 {
-    public class EventController : AbstractController<EventRepository, Event>
+    public class EventController : AbstractController<EventRepository, EventDTO>
     {
 
     }

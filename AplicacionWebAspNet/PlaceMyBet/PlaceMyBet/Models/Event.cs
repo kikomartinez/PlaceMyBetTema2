@@ -21,4 +21,20 @@ namespace PlaceMyBet.Models
         public string Date { get; set; }
 
     }
+
+    public class EventDTO
+    {
+        public EventDTO( string localTeam, string visitorTeam, string date)
+        {
+
+            LocalTeam = localTeam;
+            VisitorTeam = visitorTeam;
+            Date = date;
+        }
+
+        public string LocalTeam { get; set; }
+        public string VisitorTeam { get; set; }
+        public string Date { get; set; }
+
+    }
 }
