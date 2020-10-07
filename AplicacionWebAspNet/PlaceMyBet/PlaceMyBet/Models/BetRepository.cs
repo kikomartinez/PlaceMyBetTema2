@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using PlaceMyBet.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,8 @@ namespace PlaceMyBet.Models
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
             command.CommandText = "select * from " + tableName;
+
+
             MySqlCommand commandMarket = connection.CreateCommand();
             commandMarket.CommandText = "SELECT MERCADOS.tipo FROM MERCADOS, APUESTAS WHERE(APUESTAS.id_mercado = MERCADOS.id_mercado)";
 
@@ -88,7 +91,44 @@ namespace PlaceMyBet.Models
         {
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
-            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + bet.Odd + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
+            int marketOdds = 0;
+
+            MySqlCommand commandMarket = connection.CreateCommand();
+  
+            if (bet.TypeOfBet == "OVER")
+            {
+                commandMarket.CommandText = "SELECT MERCADOS.cuota_over FROM MERCADOS, APUESTAS WHERE(MERCADOS.id_mercado = " + bet.MarketID + " )";
+            }
+            else
+            {
+                commandMarket.CommandText = "SELECT MERCADOS.cuota_under FROM MERCADOS, APUESTAS WHERE(MERCADOS.id_mercado = " + bet.MarketID + " )";
+            }
+            Debug.WriteLine("COMANDO!!!!! " + commandMarket.CommandText);
+
+            try
+            {
+                connection.Open();
+
+                result = commandMarket.ExecuteReader();
+
+
+                while (result.Read())
+                {
+                    marketOdds = result.GetInt32(0);
+                }
+
+                connection.Close();
+
+            }
+
+            catch (MySqlException exception)
+            {
+                Debug.WriteLine("Se ha producido un error de conexión");
+                connection.Close(); 
+            }
+
+            Debug.Write("MARKET ODDS VALE:" + marketOdds);
+            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + marketOdds + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
             Debug.WriteLine("comando " + command.CommandText);
 
             try
