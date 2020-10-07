@@ -11,7 +11,7 @@ namespace PlaceMyBet.Controllers
     public abstract class AbstractController<TRepository, T> : ApiController where TRepository : AbstractRepository<T>, new() where T : class
     {
         // GET: api/Abstract
-        public IEnumerable<T> Get() 
+        public virtual IEnumerable<T> Get() 
         {
             var repository = new TRepository();
             List<T> itemsToGet = repository.Retrieve();

@@ -12,14 +12,14 @@ namespace PlaceMyBet.Models
         protected string tableName;
         protected MySqlDataReader result;
 
-        private MySqlConnection Connect()
+        protected MySqlConnection Connect()
         {
             string connectionServer = "server=localhost;port=3306;database=placemybet;uid=root;password=maribel";
             MySqlConnection connection = new MySqlConnection(connectionServer);
             return connection;
         }
 
-        internal List<T> Retrieve()
+        internal virtual List<T> Retrieve()
         {
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
