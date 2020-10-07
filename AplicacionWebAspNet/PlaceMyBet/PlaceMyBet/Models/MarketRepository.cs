@@ -6,7 +6,7 @@ using System.Web;
 
 namespace PlaceMyBet.Models
 {
-    public class MarketRepository : AbstractRepository<Market>
+    public class MarketRepository : AbstractRepository<MarketDTO>
     {
 
         public MarketRepository()
@@ -14,9 +14,9 @@ namespace PlaceMyBet.Models
             tableName = "MERCADOS";
         }
 
-        protected override Market ConvertInfoToObject()
+        protected override MarketDTO ConvertInfoToObject()
         {
-            Market market = new Market(result.GetInt32(0), result.GetInt32(1), result.GetInt32(2), result.GetInt32(3), result.GetInt32(4), result.GetInt32(5));
+            MarketDTO market = new MarketDTO(result.GetInt32(1), result.GetInt32(2), result.GetFloat(5));
             return market;
         }
     }

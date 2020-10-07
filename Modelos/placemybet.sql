@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-09-2020 a las 16:28:16
+-- Tiempo de generación: 07-10-2020 a las 11:07:45
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -91,6 +91,7 @@ CREATE TABLE `MERCADOS` (
   `cuota_under` int(11) NOT NULL,
   `dinero_over` int(11) NOT NULL,
   `dinero_under` int(11) NOT NULL,
+  `tipo` float NOT NULL,
   `id_partido` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -98,11 +99,11 @@ CREATE TABLE `MERCADOS` (
 -- Volcado de datos para la tabla `MERCADOS`
 --
 
-INSERT INTO `MERCADOS` (`id_mercado`, `cuota_over`, `cuota_under`, `dinero_over`, `dinero_under`, `id_partido`) VALUES
-(3, 4, 5, 100, 200, 3),
-(4, 5, 7, 200, 500, 3),
-(5, 6, 3, 200, 150, 4),
-(6, 2, 5, 100, 150, 4);
+INSERT INTO `MERCADOS` (`id_mercado`, `cuota_over`, `cuota_under`, `dinero_over`, `dinero_under`, `tipo`, `id_partido`) VALUES
+(3, 4, 5, 100, 200, 1.5, 3),
+(4, 5, 7, 200, 500, 2.5, 3),
+(5, 6, 3, 200, 150, 3.5, 4),
+(6, 2, 5, 100, 150, 1.5, 4);
 
 -- --------------------------------------------------------
 

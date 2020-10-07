@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace PlaceMyBet.Controllers
 {
-    public class MarketController : AbstractController<MarketRepository, Market>
+    public class MarketController : AbstractController<MarketRepository, MarketDTO>
     {
 
     }
