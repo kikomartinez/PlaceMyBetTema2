@@ -104,118 +104,18 @@ namespace PlaceMyBet.Models
             //ASIGNAMOS EL VALOR A LA CUOTA QUE ENVIAREMOS SEGÚN EL TIPO DE APUESTA Y VALORES DEL MERCADO
             InsertBet(bet, connection, command, marketFromThisBet);
 
-            //UPDATE DE CUOTA DE MERCADO:
             float betMoney, overMoney, underMoney;
-            UpdateMarketOdds(bet, connection, marketFromThisBet, out betMoney, out overMoney, out underMoney);
+            betMoney = bet.BetMoney;
+            overMoney = marketFromThisBet.OverMoney;
+            underMoney = marketFromThisBet.UnderMoney;
 
             //UPDATE DE DINERO APOSTADO
             UpdateBetMoney(bet, connection, betMoney, overMoney, underMoney);
 
-        }
+            //UPDATE DE CUOTA DE MERCADO:
+            UpdateMarketOdds(bet, connection, marketFromThisBet, betMoney, overMoney, underMoney);
 
-
-        private void UpdateBetMoney(Bet bet, MySqlConnection connection, float betMoney, float overMoney, float underMoney)
-        {
-            string typeOfMoney;
-            float money;
-            if (bet.TypeOfBet == "OVER")
-            {
-                typeOfMoney = "dinero_over";
-                money = betMoney + overMoney;
-            }
-            else
-            {
-                typeOfMoney = "dinero_under";
-                money = betMoney + underMoney;
-            }
-
-            MySqlCommand commandUpdateMoney = connection.CreateCommand();
-            commandUpdateMoney.CommandText = "Update MERCADOS Set MERCADOS." + typeOfMoney + " = " + money.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
-            Debug.WriteLine("comando UPDATE MONEY ES: " + commandUpdateMoney.CommandText);
-
-
-            try
-            {
-                connection.Open();
-                commandUpdateMoney.ExecuteNonQuery();
-                connection.Close();
-            }
-
-            catch
-            {
-                Debug.Write("Fallo de conexión al actualizar dinero mercado");
-                connection.Close();
-            }
-        }
-
-        private void UpdateMarketOdds(Bet bet, MySqlConnection connection, Market marketFromThisBet, out float betMoney, out float overMoney, out float underMoney)
-        {
-            betMoney = bet.BetMoney;
-            overMoney = marketFromThisBet.OverMoney;
-            underMoney = marketFromThisBet.UnderMoney;
-            float probability = betMoney / (overMoney + underMoney);
-            float odds = 1 / (probability) * 0.95f;
-            Debug.WriteLine("LAS ODDS SON " + odds);
-
-            MySqlCommand commandUpdateOdds = connection.CreateCommand();
-            string typeOfOddFromBet;
-
-            if (bet.TypeOfBet == "OVER")
-            {
-                typeOfOddFromBet = "cuota_over";
-            }
-            else
-            {
-                typeOfOddFromBet = "cuota_under";
-            }
-
-            commandUpdateOdds.CommandText = "Update MERCADOS Set MERCADOS." + typeOfOddFromBet + " = " + odds.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
-            Debug.WriteLine("comando UPDATE ODDS ES: " + commandUpdateOdds.CommandText);
-
-            try
-            {
-                connection.Open();
-                commandUpdateOdds.ExecuteNonQuery();
-                connection.Close();
-            }
-
-            catch
-            {
-                Debug.Write("Fallo de conexión al actualizar cuota");
-                connection.Close();
-            }
-        }
-
-        private void InsertBet(Bet bet, MySqlConnection connection, MySqlCommand command, Market market)
-        {
-            float oddsToCommand;
-
-            if (bet.TypeOfBet == "OVER")
-            {
-                oddsToCommand = market.OverOdds;
-            }
-            else
-            {
-                oddsToCommand = market.UnderOdds;
-            }
-            Debug.Write("MARKET ODDS VALE:" + oddsToCommand);
-
-            //COMANDO PARA INSERTAR LA APUESTA
-            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + oddsToCommand + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
-            Debug.WriteLine("EL COMANDO INSERTAR APUESTA ES: " + command.CommandText);
-
-            try
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
-
-            catch
-            {
-                Debug.Write("Fallo de conexión al insertar apuesta");
-                connection.Close();
-            }
+ 
         }
 
         private void GetMarketInfo(Bet bet, out MySqlConnection connection, out MySqlCommand command, out Market market)
@@ -254,5 +154,104 @@ namespace PlaceMyBet.Models
                 connection.Close();
             }
         }
+
+        private void InsertBet(Bet bet, MySqlConnection connection, MySqlCommand command, Market market)
+        {
+            float oddsToCommand;
+
+            if (bet.TypeOfBet == "OVER")
+            {
+                oddsToCommand = market.OverOdds;
+            }
+            else
+            {
+                oddsToCommand = market.UnderOdds;
+            }
+            Debug.Write("MARKET ODDS VALE:" + oddsToCommand);
+
+            //COMANDO PARA INSERTAR LA APUESTA
+            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + oddsToCommand + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
+            Debug.WriteLine("EL COMANDO INSERTAR APUESTA ES: " + command.CommandText);
+
+            try
+            {
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            catch
+            {
+                Debug.Write("Fallo de conexión al insertar apuesta");
+                connection.Close();
+            }
+        }
+
+        private void UpdateMarketOdds(Bet bet, MySqlConnection connection, Market marketFromThisBet, float betMoney, float overMoney,  float underMoney)
+        {
+
+            float probabilityOver = overMoney / (overMoney + underMoney);
+            float probabilityUnder = underMoney / (overMoney + underMoney);
+            float oddsOver = 1 / probabilityOver * 0.95f;
+            float oddsUnder = 1 / probabilityUnder * 0.95f;
+
+            MySqlCommand commandUpdateOverOdds = connection.CreateCommand();
+            MySqlCommand commandUpdateUnderOdds = connection.CreateCommand();
+   
+            commandUpdateOverOdds.CommandText = "Update MERCADOS Set MERCADOS.cuota_over = " + oddsOver.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
+            commandUpdateUnderOdds.CommandText = "Update MERCADOS Set MERCADOS.cuota_under = " + oddsUnder.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
+            Debug.WriteLine("comando UPDATE ODDSOVER ES: " + commandUpdateOverOdds.CommandText);
+            Debug.WriteLine("comando UPDATE ODDSUNDER ES: " + commandUpdateUnderOdds.CommandText);
+
+            try
+            {
+                connection.Open();
+                commandUpdateOverOdds.ExecuteNonQuery();
+                commandUpdateUnderOdds.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            catch
+            {
+                Debug.Write("Fallo de conexión al actualizar cuotas");
+                connection.Close();
+            }
+        }
+
+        private void UpdateBetMoney(Bet bet, MySqlConnection connection, float betMoney, float overMoney, float underMoney)
+        {
+            string typeOfMoney;
+            float money;
+            if (bet.TypeOfBet == "OVER")
+            {
+                typeOfMoney = "dinero_over";
+                money = betMoney + overMoney;
+            }
+            else
+            {
+                typeOfMoney = "dinero_under";
+                money = betMoney + underMoney;
+            }
+
+            MySqlCommand commandUpdateMoney = connection.CreateCommand();
+            commandUpdateMoney.CommandText = "Update MERCADOS Set MERCADOS." + typeOfMoney + " = " + money.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
+            Debug.WriteLine("comando UPDATE MONEY ES: " + commandUpdateMoney.CommandText);
+
+
+            try
+            {
+                connection.Open();
+                commandUpdateMoney.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            catch
+            {
+                Debug.Write("Fallo de conexión al actualizar dinero mercado");
+                connection.Close();
+            }
+        }
+
+
     }
 }
