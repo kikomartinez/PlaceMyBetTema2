@@ -12,8 +12,6 @@ namespace PlaceMyBet.Models
 {
     public class BetRepository : AbstractRepository<BetDTO>
     {
-
-
         List<float> marketTypes = new List<float>();
         int marketTypeIndex = 0;
 
@@ -78,7 +76,7 @@ namespace PlaceMyBet.Models
 
         protected override BetDTO ConvertInfoToObject()
         {
-            BetDTO bet = new BetDTO(result.GetString(1), result.GetInt32(2), result.GetInt32(3), result.GetString(4), result.GetString(5), marketTypes[marketTypeIndex]);
+            BetDTO bet = new BetDTO(result.GetString(1), result.GetFloat(2), result.GetFloat(3), result.GetString(4), result.GetString(5), marketTypes[marketTypeIndex]);
             marketTypeIndex++;
             return bet;
         }
@@ -141,7 +139,7 @@ namespace PlaceMyBet.Models
 
                 while (result.Read())
                 {
-                    market = new Market(result.GetInt32(0), result.GetInt32(1), result.GetInt32(2), result.GetInt32(3), result.GetInt32(4), result.GetFloat(5), result.GetInt32(6));
+                    market = new Market(result.GetInt32(0), result.GetFloat(1), result.GetFloat(2), result.GetFloat(3), result.GetFloat(4), result.GetFloat(5), result.GetInt32(6));
                 }
 
                 connection.Close();
@@ -167,11 +165,9 @@ namespace PlaceMyBet.Models
             {
                 oddsToCommand = market.UnderOdds;
             }
-            Debug.Write("MARKET ODDS VALE:" + oddsToCommand);
-
+  
             //COMANDO PARA INSERTAR LA APUESTA
             command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + oddsToCommand + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
-            Debug.WriteLine("EL COMANDO INSERTAR APUESTA ES: " + command.CommandText);
 
             try
             {
@@ -183,37 +179,6 @@ namespace PlaceMyBet.Models
             catch
             {
                 Debug.Write("Fallo de conexión al insertar apuesta");
-                connection.Close();
-            }
-        }
-
-        private void UpdateMarketOdds(Bet bet, MySqlConnection connection, Market marketFromThisBet, float betMoney, float overMoney,  float underMoney)
-        {
-
-            float probabilityOver = overMoney / (overMoney + underMoney);
-            float probabilityUnder = underMoney / (overMoney + underMoney);
-            float oddsOver = 1 / probabilityOver * 0.95f;
-            float oddsUnder = 1 / probabilityUnder * 0.95f;
-
-            MySqlCommand commandUpdateOverOdds = connection.CreateCommand();
-            MySqlCommand commandUpdateUnderOdds = connection.CreateCommand();
-   
-            commandUpdateOverOdds.CommandText = "Update MERCADOS Set MERCADOS.cuota_over = " + oddsOver.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
-            commandUpdateUnderOdds.CommandText = "Update MERCADOS Set MERCADOS.cuota_under = " + oddsUnder.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
-            Debug.WriteLine("comando UPDATE ODDSOVER ES: " + commandUpdateOverOdds.CommandText);
-            Debug.WriteLine("comando UPDATE ODDSUNDER ES: " + commandUpdateUnderOdds.CommandText);
-
-            try
-            {
-                connection.Open();
-                commandUpdateOverOdds.ExecuteNonQuery();
-                commandUpdateUnderOdds.ExecuteNonQuery();
-                connection.Close();
-            }
-
-            catch
-            {
-                Debug.Write("Fallo de conexión al actualizar cuotas");
                 connection.Close();
             }
         }
@@ -235,9 +200,7 @@ namespace PlaceMyBet.Models
 
             MySqlCommand commandUpdateMoney = connection.CreateCommand();
             commandUpdateMoney.CommandText = "Update MERCADOS Set MERCADOS." + typeOfMoney + " = " + money.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
-            Debug.WriteLine("comando UPDATE MONEY ES: " + commandUpdateMoney.CommandText);
-
-
+ 
             try
             {
                 connection.Open();
@@ -252,6 +215,34 @@ namespace PlaceMyBet.Models
             }
         }
 
+        private void UpdateMarketOdds(Bet bet, MySqlConnection connection, Market marketFromThisBet, float betMoney, float overMoney, float underMoney)
+        {
+
+            float probabilityOver = overMoney / (overMoney + underMoney);
+            float probabilityUnder = underMoney / (overMoney + underMoney);
+            float oddsOver = 1 / probabilityOver * 0.95f;
+            float oddsUnder = 1 / probabilityUnder * 0.95f;
+
+            MySqlCommand commandUpdateOverOdds = connection.CreateCommand();
+            MySqlCommand commandUpdateUnderOdds = connection.CreateCommand();
+
+            commandUpdateOverOdds.CommandText = "Update MERCADOS Set MERCADOS.cuota_over = " + oddsOver.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
+            commandUpdateUnderOdds.CommandText = "Update MERCADOS Set MERCADOS.cuota_under = " + oddsUnder.ToString() + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
+
+            try
+            {
+                connection.Open();
+                commandUpdateOverOdds.ExecuteNonQuery();
+                commandUpdateUnderOdds.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            catch
+            {
+                Debug.Write("Fallo de conexión al actualizar cuotas");
+                connection.Close();
+            }
+        }
 
     }
 }

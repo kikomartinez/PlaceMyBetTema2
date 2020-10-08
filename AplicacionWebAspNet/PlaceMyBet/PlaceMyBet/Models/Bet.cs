@@ -7,7 +7,7 @@ namespace PlaceMyBet.Models
 {
     public class Bet
     {
-        public Bet(int betID, string typeOfBet, int betMoney, int odd, string date, string userEmail, int marketID)
+        public Bet(int betID, string typeOfBet, float betMoney, float odd, string date, string userEmail, int marketID)
         {
             BetID = betID;
             TypeOfBet = typeOfBet;
@@ -20,8 +20,8 @@ namespace PlaceMyBet.Models
 
         public int BetID { get; set; }
         public string TypeOfBet { get; set; }
-        public int BetMoney { get; set; }
-        public int Odd { get; set; }
+        public float BetMoney { get; set; }
+        public float Odd { get; set; }
         public string Date { get; set; }
         public string UserEmail { get; set; }
         public int MarketID { get; set; }
@@ -29,7 +29,7 @@ namespace PlaceMyBet.Models
 
     public class BetDTO
     {
-        public BetDTO(string typeOfBet, int betMoney, int odd, string date, string userEmail, float typeOfMarket)
+        public BetDTO(string typeOfBet, float betMoney, float odd, string date, string userEmail, float typeOfMarket)
         {
             TypeOfBet = typeOfBet;
             BetMoney = betMoney;
@@ -40,8 +40,8 @@ namespace PlaceMyBet.Models
         }
 
         public string TypeOfBet { get; set; }
-        public int BetMoney { get; set; }
-        public int Odd { get; set; }
+        public float BetMoney { get; set; }
+        public float Odd { get; set; }
         public string Date { get; set; }
         public string UserEmail { get; set; }
         public float TypeOfMarket { get; set; }
