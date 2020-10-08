@@ -3,13 +3,17 @@ using PlaceMyBet.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 namespace PlaceMyBet.Models
 {
     public class BetRepository : AbstractRepository<BetDTO>
     {
+
+
         List<float> marketTypes = new List<float>();
         int marketTypeIndex = 0;
 
@@ -89,13 +93,26 @@ namespace PlaceMyBet.Models
 
         internal void Save(Bet bet)
         {
+            CultureInfo culInfo = new System.Globalization.CultureInfo("es-ES");
+
+            culInfo.NumberFormat.NumberDecimalSeparator = ".";
+
+            culInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+            culInfo.NumberFormat.PercentDecimalSeparator = ".";
+            culInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+            System.Threading.Thread.CurrentThread.CurrentCulture = culInfo;
+
+
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
             int marketOdds = 0;
+            Market market = null;
 
             MySqlCommand commandMarket = connection.CreateCommand();
-  
-            if (bet.TypeOfBet == "OVER")
+            commandMarket.CommandText = "SELECT * FROM MERCADOS WHERE MERCADOS.id_mercado =" + bet.MarketID ;
+            Debug.WriteLine("COMANDO!!!!! " + commandMarket.CommandText);
+
+            /*if (bet.TypeOfBet == "OVER")
             {
                 commandMarket.CommandText = "SELECT MERCADOS.cuota_over FROM MERCADOS, APUESTAS WHERE(MERCADOS.id_mercado = " + bet.MarketID + " )";
             }
@@ -104,17 +121,18 @@ namespace PlaceMyBet.Models
                 commandMarket.CommandText = "SELECT MERCADOS.cuota_under FROM MERCADOS, APUESTAS WHERE(MERCADOS.id_mercado = " + bet.MarketID + " )";
             }
             Debug.WriteLine("COMANDO!!!!! " + commandMarket.CommandText);
-
+            */
             try
             {
                 connection.Open();
 
                 result = commandMarket.ExecuteReader();
+                
 
 
                 while (result.Read())
                 {
-                    marketOdds = result.GetInt32(0);
+                    market = new Market(result.GetInt32(0), result.GetInt32(1), result.GetInt32(2), result.GetInt32(3), result.GetInt32(4), result.GetFloat(5), result.GetInt32(6));
                 }
 
                 connection.Close();
@@ -127,9 +145,21 @@ namespace PlaceMyBet.Models
                 connection.Close(); 
             }
 
-            Debug.Write("MARKET ODDS VALE:" + marketOdds);
-            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + marketOdds + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
-            Debug.WriteLine("comando " + command.CommandText);
+            float oddsToCommand;
+
+            if (bet.TypeOfBet == "OVER")
+            {
+                oddsToCommand = market.OverOdds;
+            }
+            else
+            {
+                oddsToCommand = market.UnderOdds;
+            }
+
+            Debug.Write("MARKET ODDS VALE:" + oddsToCommand);
+            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + oddsToCommand + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
+            Debug.WriteLine("COMMANDO ES ES ES ES " + command.CommandText);
+            
 
             try
             {
@@ -143,7 +173,49 @@ namespace PlaceMyBet.Models
                 Debug.Write("Fallo de conexión");
                 connection.Close();
             }
+
+            //UPDATE DE CUOTA DE MERCADO:
+
+            int betMoney = bet.BetMoney;
+            int overMoney = market.OverMoney;
+            int underMoney = market.UnderMoney;
+
+            float probability = betMoney / (overMoney + underMoney);
+            float odds = 1 / (probability) * 0.95f;
+            Debug.WriteLine("LAS ODDS SON " + odds);
+
+
+
+            MySqlCommand commandUpdateOdds = connection.CreateCommand();
+            string typeOfOddFromBet;
+
+            if (bet.TypeOfBet == "OVER")
+            {
+                typeOfOddFromBet = "cuota_over";
+            }
+            else
+            {
+                typeOfOddFromBet = "cuota_under";
+            }
+
+            commandUpdateOdds.CommandText = "Update MERCADOS Set MERCADOS." + typeOfOddFromBet + " = " + "0." + float.Parse(odds.ToString(), CultureInfo.InvariantCulture) + " WHERE MERCADOS.id_mercado = " + bet.MarketID + ";";
+            Debug.WriteLine("comando " + commandUpdateOdds.CommandText);
+
+            try
+            {
+                connection.Open();
+                commandUpdateOdds.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            catch
+            {
+                Debug.Write("Fallo de conexión");
+                connection.Close();
+            }
         }
+
     }
 }
 
+//"Update MERCADOS Set MERCADOS.cuota_under = 10 Where MERCADOS.id_mercado = 3;"

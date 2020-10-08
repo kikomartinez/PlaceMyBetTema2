@@ -8,7 +8,7 @@ namespace PlaceMyBet.Models
 {
     public class Market
     {
-        public Market(int marketID, int overOdds, int underOdds, int overMoney, int underMoney, float type, int eventID)
+        public Market(int marketID, float overOdds, float underOdds, int overMoney, int underMoney, float type, int eventID)
         {
             MarketID = marketID;
             OverOdds = overOdds;
@@ -20,8 +20,8 @@ namespace PlaceMyBet.Models
         }
 
         public int MarketID { get; set; }
-        public int OverOdds { get; set; }
-        public int UnderOdds { get; set; }
+        public float OverOdds { get; set; }
+        public float UnderOdds { get; set; }
         public int OverMoney { get; set; }
         public int UnderMoney { get; set; }
         public float Type { get; set; }
