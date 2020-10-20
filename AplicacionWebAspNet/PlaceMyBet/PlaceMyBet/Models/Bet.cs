@@ -52,9 +52,9 @@ namespace PlaceMyBet.Models
         public float TypeOfMarket { get; set; }
     }
 
-    public class BetDTOLessInfo : BetDTO
+    public class BetDTOLessInfoA : BetDTO
     {
-        public BetDTOLessInfo(int eventID, string typeOfBet, float odd, float betMoney)
+        public BetDTOLessInfoA(int eventID, string typeOfBet, float odd, float betMoney)
         {
             EventID = eventID;
             TypeOfBet = typeOfBet;
@@ -64,6 +64,22 @@ namespace PlaceMyBet.Models
         }
 
         public int EventID { get; set; }
+        public string TypeOfBet { get; set; }
+        public float Odd { get; set; }
+        public float BetMoney { get; set; }
+    }
+
+    public class BetDTOLessInfoB : BetDTO
+    {
+        public BetDTOLessInfoB(float marketType, string typeOfBet, float odd, float betMoney)
+        {
+            MarketType = marketType;
+            TypeOfBet = typeOfBet;
+            Odd = odd;
+            BetMoney = betMoney;
+        }
+
+        public float MarketType { get; set; }
         public string TypeOfBet { get; set; }
         public float Odd { get; set; }
         public float BetMoney { get; set; }

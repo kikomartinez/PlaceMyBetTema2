@@ -16,10 +16,19 @@ namespace PlaceMyBet.Controllers
             repository.Save(bet);
         }
 
-        public List<BetDTOLessInfo> GetBetByEmailAndMarketType(string email, float marketType)
+        //localhost:44346/api/Bet?&email={emailValue}&marketType={marketTypeValue}
+        public List<BetDTOLessInfoA> GetBetByEmailAndMarketType(string email, float marketType)
         {
             var repository = new BetRepository();
-            List<BetDTOLessInfo> bets = repository.RetrieveByEmailAndMarketType(email, marketType);
+            List<BetDTOLessInfoA> bets = repository.RetrieveByEmailAndMarketType(email, marketType);
+            return bets;
+        }
+
+        //localhost:44346/api/Bet?marketID={marketIDvalue}&email={emailValue}
+        public List<BetDTOLessInfoB> GetBetByEmailAndMarketID(int marketID, string email)
+        {
+            var repository = new BetRepository();
+            List<BetDTOLessInfoB> bets = repository.RetrieveByEmailAndMarketID(marketID, email);
             return bets;
         }
     }

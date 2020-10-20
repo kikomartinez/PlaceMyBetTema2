@@ -244,7 +244,7 @@ namespace PlaceMyBet.Models
             }
         }
 
-        internal List<BetDTOLessInfo> RetrieveByEmailAndMarketType(string email, float marketType)
+        internal List<BetDTOLessInfoA> RetrieveByEmailAndMarketType(string email, float marketType)
         {
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
@@ -257,12 +257,46 @@ namespace PlaceMyBet.Models
                 connection.Open();
                 MySqlDataReader result = command.ExecuteReader();
 
-                BetDTOLessInfo bet = null;
-                List<BetDTOLessInfo> bets = new List<BetDTOLessInfo>();
+                BetDTOLessInfoA bet = null;
+                List<BetDTOLessInfoA> bets = new List<BetDTOLessInfoA>();
                 while (result.Read())
                 {
                     Debug.WriteLine("RECUPERADO APUESTA: " + result.GetInt32(7), result.GetString(1), result.GetFloat(3), result.GetFloat(2));
-                    bet = new BetDTOLessInfo(result.GetInt32(7), result.GetString(1), result.GetFloat(3), result.GetFloat(2));
+                    bet = new BetDTOLessInfoA(result.GetInt32(7), result.GetString(1), result.GetFloat(3), result.GetFloat(2));
+                    bets.Add(bet);
+                }
+
+                connection.Close();
+                return bets;
+            }
+
+            catch (MySqlException exception)
+            {
+                Debug.WriteLine("Se ha producido un error de conexión al intentar conseguir apuesta");
+                connection.Close();
+                return null;
+            }
+        }
+
+        internal List<BetDTOLessInfoB> RetrieveByEmailAndMarketID(int marketID, string email)
+        {
+            MySqlConnection connection = Connect();
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT APUESTAS.*, MERCADOS.tipo FROM APUESTAS, USUARIOS, MERCADOS WHERE APUESTAS.id_mercado = @A1 AND USUARIOS.email = @A2";
+            command.Parameters.AddWithValue("@A1", marketID);
+            command.Parameters.AddWithValue("@A2", email);
+
+            try
+            {
+                connection.Open();
+                MySqlDataReader result = command.ExecuteReader();
+
+                BetDTOLessInfoB bet = null;
+                List<BetDTOLessInfoB> bets = new List<BetDTOLessInfoB>();
+                while (result.Read())
+                {
+                    Debug.WriteLine("RECUPERADO APUESTA: " + result.GetFloat(7), result.GetString(1), result.GetFloat(3), result.GetFloat(2));
+                    bet = new BetDTOLessInfoB(result.GetFloat(7), result.GetString(1), result.GetFloat(3), result.GetFloat(2));
                     bets.Add(bet);
                 }
 
