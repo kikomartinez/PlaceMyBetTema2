@@ -10,7 +10,7 @@ using System.Web;
 
 namespace PlaceMyBet.Models
 {
-    public class BetRepository : AbstractRepository<BetDTO>
+    public class BetRepository : AbstractRepository<BetDTOExpanded>
     {
         List<float> marketTypes = new List<float>();
         int marketTypeIndex = 0;
@@ -20,7 +20,7 @@ namespace PlaceMyBet.Models
             tableName = "APUESTAS";
         }
 
-        internal override List<BetDTO> Retrieve()
+        internal override List<BetDTOExpanded> Retrieve()
         {
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
@@ -53,8 +53,8 @@ namespace PlaceMyBet.Models
                 connection.Open();
                 result = command.ExecuteReader();
                 
-                BetDTO item = null;
-                List<BetDTO> itemsToRetrieve = new List<BetDTO>();
+                BetDTOExpanded item = null;
+                List<BetDTOExpanded> itemsToRetrieve = new List<BetDTOExpanded>();
 
                 while (result.Read())
                 {
@@ -74,9 +74,9 @@ namespace PlaceMyBet.Models
             }
         }
 
-        protected override BetDTO ConvertInfoToObject()
+        protected override BetDTOExpanded ConvertInfoToObject()
         {
-            BetDTO bet = new BetDTO(result.GetString(1), result.GetFloat(2), result.GetFloat(3), result.GetString(4), result.GetString(5), marketTypes[marketTypeIndex]);
+            BetDTOExpanded bet = new BetDTOExpanded(result.GetString(1), result.GetFloat(2), result.GetFloat(3), result.GetString(4), result.GetString(5), marketTypes[marketTypeIndex]);
             marketTypeIndex++;
             return bet;
         }
@@ -244,5 +244,38 @@ namespace PlaceMyBet.Models
             }
         }
 
+        internal List<BetDTOLessInfo> RetrieveByEmailAndMarketType(string email, float marketType)
+        {
+            MySqlConnection connection = Connect();
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT APUESTAS.*, MERCADOS.id_partido FROM APUESTAS, MERCADOS WHERE APUESTAS.ref_email_usuario = @A1 AND MERCADOS.tipo = @A2";
+            command.Parameters.AddWithValue("@A1", email);
+            command.Parameters.AddWithValue("@A2", marketType);
+
+            try
+            {
+                connection.Open();
+                MySqlDataReader result = command.ExecuteReader();
+
+                BetDTOLessInfo bet = null;
+                List<BetDTOLessInfo> bets = new List<BetDTOLessInfo>();
+                while (result.Read())
+                {
+                    Debug.WriteLine("RECUPERADO APUESTA: " + result.GetInt32(7), result.GetString(1), result.GetFloat(3), result.GetFloat(2));
+                    bet = new BetDTOLessInfo(result.GetInt32(7), result.GetString(1), result.GetFloat(3), result.GetFloat(2));
+                    bets.Add(bet);
+                }
+
+                connection.Close();
+                return bets;
+            }
+
+            catch (MySqlException exception)
+            {
+                Debug.WriteLine("Se ha producido un error de conexión al intentar conseguir apuesta");
+                connection.Close();
+                return null;
+            }
+        }
     }
 }

@@ -27,9 +27,14 @@ namespace PlaceMyBet.Models
         public int MarketID { get; set; }
     }
 
-    public class BetDTO
+    public abstract class BetDTO
     {
-        public BetDTO(string typeOfBet, float betMoney, float odd, string date, string userEmail, float typeOfMarket)
+
+    }
+
+    public class BetDTOExpanded : BetDTO
+    {
+        public BetDTOExpanded(string typeOfBet, float betMoney, float odd, string date, string userEmail, float typeOfMarket)
         {
             TypeOfBet = typeOfBet;
             BetMoney = betMoney;
@@ -45,5 +50,22 @@ namespace PlaceMyBet.Models
         public string Date { get; set; }
         public string UserEmail { get; set; }
         public float TypeOfMarket { get; set; }
+    }
+
+    public class BetDTOLessInfo : BetDTO
+    {
+        public BetDTOLessInfo(int eventID, string typeOfBet, float odd, float betMoney)
+        {
+            EventID = eventID;
+            TypeOfBet = typeOfBet;
+            Odd = odd;
+            BetMoney = betMoney;
+
+        }
+
+        public int EventID { get; set; }
+        public string TypeOfBet { get; set; }
+        public float Odd { get; set; }
+        public float BetMoney { get; set; }
     }
 }
