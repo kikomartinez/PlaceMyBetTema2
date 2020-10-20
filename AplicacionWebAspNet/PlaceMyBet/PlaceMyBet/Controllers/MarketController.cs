@@ -10,6 +10,12 @@ namespace PlaceMyBet.Controllers
 {
     public class MarketController : AbstractController<MarketRepository, MarketDTO>
     {
-
+        //localhost:44346/api/Market?eventID={eventIDvalue}&marketType={marketTypeValue}
+        public MarketDTO GetMarketFromEventAndMarketType(int eventID, float marketType)
+        {
+            var repository = new MarketRepository();
+            MarketDTO market = repository.RetrieveByEventAndMarketType(eventID, marketType);
+            return market;
+        }
     }
 }
