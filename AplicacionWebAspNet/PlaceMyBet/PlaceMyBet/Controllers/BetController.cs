@@ -18,6 +18,7 @@ namespace PlaceMyBet.Controllers
         }
 
         //localhost:44346/api/Bet?&email={emailValue}&marketType={marketTypeValue}
+        [Authorize(Roles = "Admin")]
         public List<BetDTOLessInfoA> GetBetByEmailAndMarketType(string email, float marketType)
         {
             var repository = new BetRepository();
@@ -26,6 +27,7 @@ namespace PlaceMyBet.Controllers
         }
 
         //localhost:44346/api/Bet?marketID={marketIDvalue}&email={emailValue}
+        [Authorize(Roles = "Admin")]
         public List<BetDTOLessInfoB> GetBetByEmailAndMarketID(int marketID, string email)
         {
             var repository = new BetRepository();
