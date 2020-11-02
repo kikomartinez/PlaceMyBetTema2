@@ -7,18 +7,20 @@ namespace PlaceMyBet.Models
 {
     public class Event
     {
-        public Event(int eventID, string localTeam, string visitorTeam, string date)
+        public Event(int eventID, string localTeam, string visitorTeam, string date, List<Market> markets)
         {
             EventID = eventID;
             LocalTeam = localTeam;
             VisitorTeam = visitorTeam;
             Date = date;
+            Markets = markets;
         }
 
         public int EventID { get; set; }
         public string LocalTeam { get; set; }
         public string VisitorTeam { get; set; }
         public string Date { get; set; }
+        public List<Market> Markets { get; set; }
 
     }
 

@@ -7,17 +7,12 @@ using System.Web;
 
 namespace PlaceMyBet.Models
 {
-    public class EventRepository : AbstractRepository<EventDTO>
+    public class EventRepository
     {
-        public EventRepository()
+        internal List<Event> Retrieve()
         {
-            tableName = "EVENTOS";
-        }
-
-        protected override EventDTO ConvertInfoToObject()
-        { 
-            EventDTO footballEvent = new EventDTO(result.GetString(1), result.GetString(2), result.GetString(3));
-            return footballEvent;
+            List<Event> events = new List<Event>();
+            using 
         }
     }
 }

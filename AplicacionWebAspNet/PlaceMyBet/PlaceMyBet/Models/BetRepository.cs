@@ -167,7 +167,7 @@ namespace PlaceMyBet.Models
             }
   
             //COMANDO PARA INSERTAR LA APUESTA
-            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + oddsToCommand + "','" + bet.Date + "','" + bet.UserEmail + "','" + bet.MarketID + "');";
+            command.CommandText = "insert into APUESTAS(tipo_apuesta, dinero_apostado, cuota, fecha, ref_email_usuario, id_mercado) values ('" + bet.TypeOfBet + "','" + bet.BetMoney + "','" + oddsToCommand + "','" + bet.Date + "','" + bet.UserID + "','" + bet.MarketID + "');";
 
             try
             {

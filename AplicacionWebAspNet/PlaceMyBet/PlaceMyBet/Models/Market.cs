@@ -8,7 +8,7 @@ namespace PlaceMyBet.Models
 {
     public class Market
     {
-        public Market(int marketID, float overOdds, float underOdds, float overMoney, float underMoney, float type, int eventID)
+        public Market(int marketID, float overOdds, float underOdds, float overMoney, float underMoney, float type, int eventID, List<Bet> bets)
         {
             MarketID = marketID;
             OverOdds = overOdds;
@@ -17,6 +17,7 @@ namespace PlaceMyBet.Models
             UnderMoney = underMoney;
             Type = type;
             EventID = eventID;
+            Bets = bets;
         }
 
         public int MarketID { get; set; }
@@ -26,6 +27,8 @@ namespace PlaceMyBet.Models
         public float UnderMoney { get; set; }
         public float Type { get; set; }
         public int EventID { get; set; }
+        public Event Event { get; set; }
+        public List<Bet> Bets { get; set; }
     }
 
     public class MarketDTO
