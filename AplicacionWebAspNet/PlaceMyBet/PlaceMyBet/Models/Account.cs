@@ -8,7 +8,7 @@ namespace PlaceMyBet.Models
     public class Account
     {
 
-        public Account(int accountID, float currentMoney, string bank, int userID)
+        public Account(int accountID, float currentMoney, string bank, string userID)
         {
             AccountID = accountID;
             CurrentMoney = currentMoney;
@@ -20,7 +20,7 @@ namespace PlaceMyBet.Models
         public int AccountID { get; set; }
         public float CurrentMoney { get; set; }
         public string Bank { get; set; }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public User User { get; set; }
     }
 }
