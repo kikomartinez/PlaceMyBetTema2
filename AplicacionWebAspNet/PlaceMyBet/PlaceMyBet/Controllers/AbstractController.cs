@@ -14,8 +14,8 @@ namespace PlaceMyBet.Controllers
         public virtual IEnumerable<T> Get() 
         {
             var repository = new TRepository();
-            List<T> itemsToGet = repository.Retrieve();
-            return itemsToGet;
+            //List<T> itemsToGet = repository.Retrieve();
+            return null;
         }
 
     }

@@ -14,8 +14,8 @@ namespace PlaceMyBet.Controllers
         public MarketDTO GetMarketFromEventAndMarketType(int eventID, float marketType)
         {
             var repository = new MarketRepository();
-            MarketDTO market = repository.RetrieveByEventAndMarketType(eventID, marketType);
-            return market;
+            //MarketDTO market = repository.RetrieveByEventAndMarketType(eventID, marketType);
+            return null;
         }
     }
 }

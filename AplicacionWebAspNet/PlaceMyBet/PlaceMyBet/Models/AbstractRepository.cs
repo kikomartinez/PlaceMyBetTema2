@@ -10,16 +10,16 @@ namespace PlaceMyBet.Models
     public abstract class AbstractRepository<T> where T : class
     {
         protected string tableName;
-        protected MySqlDataReader result;
+        //protected MySqlDataReader result;
 
-        protected MySqlConnection Connect()
+        /*protected MySqlConnection Connect()
         {
             string connectionServer = "server=localhost;port=3306;database=placemybet;uid=root;password=maribel";
             MySqlConnection connection = new MySqlConnection(connectionServer);
             return connection;
-        }
+        }*/
 
-        internal virtual List<T> Retrieve()
+        /*internal virtual List<T> Retrieve()
         {
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
@@ -49,7 +49,7 @@ namespace PlaceMyBet.Models
                 connection.Close();
                 return null;
             }
-        }
+        }*/
 
         protected abstract T ConvertInfoToObject();
 

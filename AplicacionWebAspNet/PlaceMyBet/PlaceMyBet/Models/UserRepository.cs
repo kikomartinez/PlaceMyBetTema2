@@ -16,8 +16,8 @@ namespace PlaceMyBet.Models
 
         protected override User ConvertInfoToObject()
         {
-            User user = new User(result.GetString(0), result.GetString(1), result.GetString(2), result.GetInt32(3));
-            return user;
+            //User user = new User(result.GetString(0), result.GetString(1), result.GetString(2), result.GetInt32(3));
+            return null;
         }
     }
 }

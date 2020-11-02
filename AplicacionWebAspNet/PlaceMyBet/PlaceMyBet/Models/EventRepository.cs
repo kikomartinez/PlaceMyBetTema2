@@ -16,8 +16,8 @@ namespace PlaceMyBet.Models
 
         protected override EventDTO ConvertInfoToObject()
         {
-            EventDTO footballEvent = new EventDTO(result.GetString(1), result.GetString(2), result.GetString(3));
-            return footballEvent;
+           // EventDTO footballEvent = new EventDTO(result.GetString(1), result.GetString(2), result.GetString(3));
+            return null;
         }
     }
 }

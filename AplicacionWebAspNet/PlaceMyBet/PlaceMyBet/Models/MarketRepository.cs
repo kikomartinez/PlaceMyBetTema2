@@ -17,11 +17,11 @@ namespace PlaceMyBet.Models
 
         protected override MarketDTO ConvertInfoToObject()
         {
-            MarketDTO market = new MarketDTO(result.GetInt32(1), result.GetInt32(2), result.GetFloat(5));
-            return market;
+           // MarketDTO market = new MarketDTO(result.GetInt32(1), result.GetInt32(2), result.GetFloat(5));
+            return null;
         }
 
-        internal MarketDTO RetrieveByEventAndMarketType(int eventID, float marketType)
+       /* internal MarketDTO RetrieveByEventAndMarketType(int eventID, float marketType)
         {
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
@@ -51,6 +51,6 @@ namespace PlaceMyBet.Models
                 connection.Close();
                 return null;
             }
-        }
+        } */
     }
 }

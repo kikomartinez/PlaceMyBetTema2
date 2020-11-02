@@ -20,7 +20,7 @@ namespace PlaceMyBet.Models
             tableName = "APUESTAS";
         }
 
-        internal override List<BetDTOExpanded> Retrieve()
+       /* internal override List<BetDTOExpanded> Retrieve()
         {
             MySqlConnection connection = Connect();
             MySqlCommand command = connection.CreateCommand();
@@ -72,16 +72,16 @@ namespace PlaceMyBet.Models
                 connection.Close();
                 return null;
             }
-        }
+        }*/
 
         protected override BetDTOExpanded ConvertInfoToObject()
         {
-            BetDTOExpanded bet = new BetDTOExpanded(result.GetString(1), result.GetFloat(2), result.GetFloat(3), result.GetString(4), result.GetString(5), marketTypes[marketTypeIndex]);
-            marketTypeIndex++;
-            return bet;
+           // BetDTOExpanded bet = new BetDTOExpanded(result.GetString(1), result.GetFloat(2), result.GetFloat(3), result.GetString(4), result.GetString(5), marketTypes[marketTypeIndex]);
+            //marketTypeIndex++;
+            return null;
         }
 
-        internal void Save(Bet bet)
+       /* internal void Save(Bet bet)
         {
             //ADAPTAR CULTURA PARA EVITAR PROBLEMAS CON LA COMA
             CultureInfo culInfo = new System.Globalization.CultureInfo("es-ES");
@@ -92,8 +92,8 @@ namespace PlaceMyBet.Models
             System.Threading.Thread.CurrentThread.CurrentCulture = culInfo;
 
             //ELEMENTOS NECESARIOS PARA LA CONEXIÓN CON MYSQL
-            MySqlConnection connection;
-            MySqlCommand command;
+            //MySqlConnection connection;
+            //MySqlCommand command;
 
             //CONSEGUIMOS INFO DEL MERCADO EN EL QUE SE REALIZA LA APUESTA
             Market marketFromThisBet;
@@ -116,7 +116,7 @@ namespace PlaceMyBet.Models
  
         }
 
-        private void GetMarketInfo(Bet bet, out MySqlConnection connection, out MySqlCommand command, out Market market)
+       /* private void GetMarketInfo(Bet bet, out MySqlConnection connection, out MySqlCommand command, out Market market)
         {
             //CREAR CONEXIÓN CON MYSQL
             connection = Connect();
@@ -310,6 +310,6 @@ namespace PlaceMyBet.Models
                 connection.Close();
                 return null;
             }
-        }
+        }*/
     }
 }

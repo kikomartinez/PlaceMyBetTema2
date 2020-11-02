@@ -7,7 +7,7 @@ namespace PlaceMyBet.Models
 {
     public class Bet
     {
-        public Bet(int betID, string typeOfBet, float betMoney, float odd, string date, string userID, int marketID, Market market, User user)
+        public Bet(int betID, string typeOfBet, float betMoney, float odd, string date, string userID, int marketID)
         {
             BetID = betID;
             TypeOfBet = typeOfBet;
@@ -16,8 +16,6 @@ namespace PlaceMyBet.Models
             Date = date;
             UserID = userID;
             MarketID = marketID;
-            Market = market;
-            User = user;
         }
 
         public int BetID { get; set; }

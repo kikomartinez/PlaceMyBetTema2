@@ -335,6 +335,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AbstractRepository.cs" />
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Bet.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Market.cs" />
     <Compile Include="Models\MarketRepository.cs" />
+    <Compile Include="Models\PlaceMyBetContext.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
